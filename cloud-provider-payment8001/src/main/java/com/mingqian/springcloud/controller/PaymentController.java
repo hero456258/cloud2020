@@ -11,6 +11,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: mingqian
@@ -80,6 +81,16 @@ public class PaymentController {
 
     @GetMapping("/lb")
     public String getLB(){
+        return serverPort;
+    }
+
+    @GetMapping("/feign/timeout")
+    public String timeOut(){
+        try {
+            TimeUnit.SECONDS.sleep(3);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return serverPort;
     }
 }

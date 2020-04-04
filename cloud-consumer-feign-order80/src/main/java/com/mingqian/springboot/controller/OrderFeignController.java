@@ -24,4 +24,11 @@ public class OrderFeignController {
     public Result<Payment> detail(@PathVariable("id") Long id) {
         return paymentService.detail(id);
     }
+
+    @GetMapping("/timeOut")
+    public String timeOut() {
+        //openFeign-ribbon,客户端一般默认等待一秒钟
+        return paymentService.timeOut();
+    }
+
 }
