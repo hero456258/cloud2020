@@ -23,7 +23,6 @@ public class PaymentController {
     @Value("${server.port}")
     private String serverPort;
 
-
     @GetMapping("/{id}")
     public Result<Payment> detail(@PathVariable("id") Long id) {
 
