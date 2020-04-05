@@ -1,6 +1,7 @@
 package com.mingqian.springcloud.controller;
 
 import com.mingqian.springcloud.service.PaymentHystixService;
+import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @Slf4j
+@DefaultProperties(defaultFallback = "payment_global_FallBackMethod")
 public class OrderHystixController {
 
     @Autowired
@@ -28,10 +30,21 @@ public class OrderHystixController {
     }
 
     @GetMapping("/consumer/payment/hystix/timeout/{id}")
+//    @HystrixCommand(fallbackMethod = "paymentInfoTimeOutHandler", commandProperties = {
+//            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1500")
+//    })
+    @HystrixCommand
+    public String paymentInfoTimeout(@PathVariable("id") Integer id) {
+        int age = 10 / 0;
+        String result = paymentHystixService.paymentInfoTimeOut(id);
+        return result;
+    }
+
+    @GetMapping("/consumer/payment/hystix/timeout2/{id}")
     @HystrixCommand(fallbackMethod = "paymentInfoTimeOutHandler", commandProperties = {
             @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1500")
     })
-    public String paymentInfoTimeout(@PathVariable("id") Integer id) {
+    public String paymentInfoTimeout2(@PathVariable("id") Integer id) {
         int age = 10 / 0;
         String result = paymentHystixService.paymentInfoTimeOut(id);
         return result;
@@ -40,6 +53,13 @@ public class OrderHystixController {
     public String paymentInfoTimeOutHandler(@PathVariable("id") Integer id) {
         return "我是80消费者自我做服务降级 ";
 
+    }
+
+
+    // 下面是全局fallback方法
+    public String payment_global_FallBackMethod(){
+
+        return "服务器繁忙请稍后重试";
     }
 
 }
