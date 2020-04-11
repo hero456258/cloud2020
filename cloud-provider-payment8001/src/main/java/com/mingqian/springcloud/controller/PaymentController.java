@@ -32,6 +32,11 @@ public class PaymentController {
     private DiscoveryClient discoveryClient;
 
 
+    @GetMapping("/zipkin")
+    public String paymentZipkin(){
+        return "test springCloudZipkin-------------------*************------------------";
+    }
+
     @GetMapping("/{id}")
     public Result<Payment> detail(@PathVariable("id") Long id) {
 

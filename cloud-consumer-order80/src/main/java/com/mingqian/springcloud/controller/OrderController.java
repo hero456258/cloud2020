@@ -34,6 +34,11 @@ public class OrderController {
     @Autowired
     private LoadBalancer loadBalancer;
 
+    @GetMapping("/consumer/payment/zipkin")
+    public String paymentZipkin() {
+        return restTemplate.getForObject("http://localhost:8001" + "/payment/zipkin", String.class);
+    }
+
     @PostMapping("/consumer/payment/create")
     public Result<Boolean> create(@RequestBody Payment payment) {
         return restTemplate.postForObject(PAYMENT_URL + "/payment/create", payment, Result.class);
